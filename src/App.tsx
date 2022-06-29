@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Suspense } from 'react';
 import './App.css';
-
-function App() {
+import routes from './routes';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ApiProvider from './components/ApiProvider';
+const App: React.FC<{}> = function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApiProvider>
+      <BrowserRouter basename='/oloko-bigscreen'>
+        <Routes>
+          {routes.map((item, i) => {
+            return (<Route key={i} path={item.path} element={
+              <Suspense fallback={<div>
+                路由加载中...
+              </div>}>
+                <item.element></item.element>
+              </Suspense>
+            }>
+            </Route>)
+          })}
+        </Routes>
+      </BrowserRouter>
+    </ApiProvider>
+
   );
 }
 

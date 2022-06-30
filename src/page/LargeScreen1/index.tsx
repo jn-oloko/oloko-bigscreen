@@ -3,9 +3,9 @@ import Styles from "./index.module.css"
 import { useGetAccountInfoUsingGET } from "../../swagger/platform-api";
 import * as echarts from 'echarts/core';
 import {
-  BarChart,
+  BarChart,//条形图
   // 系列类型的定义后缀都为 SeriesOption
-  BarSeriesOption,
+  BarSeriesOption,//条形图系列选项 
   LineChart,
   LineSeriesOption
 } from 'echarts/charts';
@@ -15,8 +15,8 @@ import {
   TitleComponentOption,
   TooltipComponent,
   TooltipComponentOption,
-  GridComponent,
-  GridComponentOption,
+  GridComponent,//网格组件
+  GridComponentOption,//网格组件选项
   // 数据集组件
   DatasetComponent,
   DatasetComponentOption,
@@ -24,15 +24,16 @@ import {
   TransformComponent
 } from 'echarts/components';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
-import { CanvasRenderer } from 'echarts/renderers';
+import { CanvasRenderer } from 'echarts/renderers';//画布渲染器 
 import moment from "moment"
+import Chart from "../../components/chart"
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
 type ECOption = echarts.ComposeOption<
-  | BarSeriesOption
+  | BarSeriesOption//条形图系列选项 
   | LineSeriesOption
   | TitleComponentOption
   | TooltipComponentOption
-  | GridComponentOption
+  | GridComponentOption//网格组件选项
   | DatasetComponentOption
 >;
 
@@ -40,35 +41,22 @@ type ECOption = echarts.ComposeOption<
 echarts.use([
   TitleComponent,
   TooltipComponent,
-  GridComponent,
+  GridComponent,//网格组件
   DatasetComponent,
   TransformComponent,
-  BarChart,
+  BarChart,//条形图
   LabelLayout,
   UniversalTransition,
-  CanvasRenderer
+  CanvasRenderer//画布渲染器 
 ]);
-var myChart: any;
 let flag: any;
-let flag2: any;
 const LargeScreen1: React.FC<{}> = () => {
-  moment.locale("zh-cn")
-console.log("moment.locale(); ",moment.locale());
 
   const [a, setA] = React.useState(moment(new Date()).format("YYYY-MM-DD HH:mm:ss dddd a"))
-  const [resizeflag, setResizeflag] = useState(true)
+  const [option, setoption] = React.useState<ECOption>({})
 
-
-  const resize = React.useCallback(() => {
-    window.clearTimeout(flag2)
-    flag2 = window.setTimeout(() => {
-      myChart?.resize()
-    }, 300)
-  }, [])
   React.useEffect(() => {
-    var chartDom: HTMLElement = document.getElementById('scatter') as HTMLElement;
-    myChart = echarts.init(chartDom);
-    myChart.showLoading();
+
     flag = window.setInterval(() => {
       setA(moment(new Date()).format("YYYY-MM-DD HH:mm:ss dddd a"))
     }, 1000)
@@ -76,19 +64,11 @@ console.log("moment.locale(); ",moment.locale());
       window.clearInterval(flag)
     }
   }, [])
-  React.useEffect(() => {
-    window.addEventListener("resize",
-      resize
-    )
-    return () => {
-      window.removeEventListener("resize", resize)
-    }
-  }, [])
-  const { data } = useGetAccountInfoUsingGET({
+
+  const {refetch} = useGetAccountInfoUsingGET({
     queryParams: { name: "", size: 7 }, resolve(data) {
       if (data.code === "SUCCESS") {
-        myChart.hideLoading();
-        let option: ECOption = {
+        setoption({
           title: {
             text: '员工数量'
           },
@@ -114,8 +94,8 @@ console.log("moment.locale(); ",moment.locale());
               }
             }
           ]
-        };
-        myChart.setOption(option);
+        })
+
       }
       return data
     }
@@ -126,6 +106,7 @@ console.log("moment.locale(); ",moment.locale());
 
         <div className={Styles.headleft}>
           <p>{a}</p>
+          {/* <button onClick={() => { refetch() }}>更新</button> */}
         </div>
         <div className={Styles.headmiddle}>
 
@@ -150,10 +131,7 @@ console.log("moment.locale(); ",moment.locale());
 
         </div>
         <div className={Styles.bodymiddle} >
-          <div className={Styles.exhibitionarea} id="scatter">
-
-          </div>
-
+          <Chart renderer="canvas" option={option}></Chart>
         </div>
         <div className={Styles.bodyright}>
           <div className={Styles.exhibitionarea}>

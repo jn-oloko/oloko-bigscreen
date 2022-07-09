@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@jiaminghi/data-view-react": "^1.2.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,15 +11,19 @@
     "@types/node": "^16.11.41",
     "@types/react": "17",
     "@types/react-dom": "^18.0.5",
+    "antd": "^4.21.5",
     "echarts": "^5.3.3",
+    "formik": "^2.2.9",
     "global": "^4.4.0",
+    "moment": "^2.29.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "restful-react": "^15.9.4",
     "typescript": "^4.7.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@types/echarts": "^4.9.15"
+    "@types/echarts": "^4.9.15",
+    "styled-components": "^5.3.5"
   }
 }
